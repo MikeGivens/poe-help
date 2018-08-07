@@ -1,0 +1,159 @@
+<html>
+    <head>
+		<style type="text/css">
+   			body { 	
+   				background-color: #100A0A !important;
+				background-image: url("/images/<%= classChoice %>.jpg") !important;
+			    background-repeat: no-repeat;
+				background-size: 1920px 1080px;
+				background-attachment: fixed;
+				background-position: center center;
+			 }
+		</style>
+    	<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.css">
+        <title><%= classChoice %> - PoE Help</title>
+    </head>
+    <body>
+		<div class="container">
+			<h1> <%= classChoice %> Builds</h1>
+			<table id="buildsTable" class="table table-dark">
+				<thead>
+				    <tr>
+				      <th scope="col" onclick="sortTable(0)" title="Forum Title">Title</th>
+				      <th scope="col" onclick="sortTable(1)">Ascendancy</th>
+				      <th scope="col" onclick="sortTable(2)" >Level</th>
+				      <th scope="col" onclick="sortTable(3)" >Life+Energy Shield</th>
+				      <th scope="col" onclick="sortTable(4)">Main Skill DPS</th>
+				      <th scope="col">Link</th>
+				    </tr>
+		  		</thead>
+		  		<tbody>
+		  			<% builds.forEach(function(build) { %>
+					<%if (require == true) { %>
+						<%if (build.pathofbuilding != '') { %>
+							<tr>
+								<td><a href= <%= build.forumlink %>> <%= build.name %></a></td>									
+								<% var best_Index = -1 %>
+								<% var highest_Level = -1 %>
+								<%if (build.pathofbuilding.pob_objs != undefined) { %>
+									<%for(var i = 0; i < build.pathofbuilding.pob_objs.length; i++) { %>
+										<%if (build.pathofbuilding.pob_objs[i].stats.Level > highest_Level) { %>
+											<% highest_level = build.pathofbuilding.pob_objs[i].level %>
+											<% best_Index = i %>
+										<% } %>
+									<% } %>
+									<td><%= build.pathofbuilding.pob_objs[best_Index].stats.Ascendancy %></td>
+									<td><%= build.pathofbuilding.pob_objs[best_Index].stats.Level %></td>
+									<% var EHP = parseInt(build.pathofbuilding.pob_objs[best_Index].stats.EnergyShield) + parseInt(build.pathofbuilding.pob_objs[best_Index].stats.Life) %>
+									<td><%= EHP %></td>
+									<td><%= build.pathofbuilding.pob_objs[best_Index].stats.TotalDPS %></td>					
+									<td><%= build.pathofbuilding.pob_objs[best_Index].link %></td>
+								<% } %>	
+							</tr>
+						<% } %>
+					<% } else{ %>
+						<%if (build.pathofbuilding == '') { %>	
+							<tr>
+								<td><a href= <%= build.forumlink %>> <%= build.name %></a></td>
+								<td>No Path of Building Found</td>
+								<td>-1</td>
+								<td>-1</td>
+								<td>-1</td>
+								<td>-</td>
+							</tr>
+						<% } else{ %>
+							<tr>
+								<td><a href= <%= build.forumlink %>> <%= build.name %></a></td>									
+								<% var best_Index = -1 %>
+								<% var highest_Level = -1 %>
+								<%if (build.pathofbuilding.pob_objs != undefined) { %>
+									<%for(var i = 0; i < build.pathofbuilding.pob_objs.length; i++) { %>
+										<%if (build.pathofbuilding.pob_objs[i].stats.Level > highest_Level) { %>
+											<% highest_level = build.pathofbuilding.pob_objs[i].level %>
+											<% best_Index = i %>
+										<% } %>
+									<% } %>
+									<td><%= build.pathofbuilding.pob_objs[best_Index].stats.Ascendancy %></td>
+									<td><%= build.pathofbuilding.pob_objs[best_Index].stats.Level %></td>
+									<% var EHP = parseInt(build.pathofbuilding.pob_objs[best_Index].stats.EnergyShield) + parseInt(build.pathofbuilding.pob_objs[best_Index].stats.Life) %>
+									<td><%= EHP %></td>
+									<td><%= build.pathofbuilding.pob_objs[best_Index].stats.TotalDPS %></td>					
+									<td><%= build.pathofbuilding.pob_objs[best_Index].link %></td>
+								<% } %>	
+							</tr>
+						<% } %>	
+					<% } %>
+				<% }) %>
+		  		</tbody>
+			</table>
+		</div>
+    </body>
+    <script>
+		function sortTable(n) {
+			var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+			table = document.getElementById("buildsTable");
+		  	switching = true;
+		  	dir = "asc"; 
+		  	while (switching) {
+		    	switching = false;
+		    	rows = table.getElementsByTagName("TR");
+		    	for (i = 1; i < (rows.length - 1); i++) {
+		    		shouldSwitch = false;
+		    		x = rows[i].getElementsByTagName("TD")[n];
+		    		y = rows[i + 1].getElementsByTagName("TD")[n];
+			     	if (dir == "asc") {
+			     		if (n == 2 || n == 3) {
+				        	if (parseInt(x.innerHTML) > parseInt(y.innerHTML)) {
+			          		shouldSwitch = true;
+			          		break;
+			          		}
+			     		}
+			     		if (n == 4) {
+				        	if (parseFloat(x.innerHTML) > parseFloat(y.innerHTML)) {
+			          		shouldSwitch = true;
+			          		break;
+			          		}
+			     		}
+			     		if (n == 0 || n == 1) {
+				        	if (x.innerText.toLowerCase() > y.innerText.toLowerCase()) {
+				          	shouldSwitch = true;
+				          	break;
+				        	}
+			        	}
+			      	} 
+			      	else if (dir == "desc") {
+			     		if (n == 2 || n == 3) {
+				        	if (parseInt(x.innerHTML) < parseInt(y.innerHTML)) {
+			          		shouldSwitch = true;
+			          		break;
+			          		}
+			     		}
+			     		if (n == 4) {
+				        	if (parseFloat(x.innerHTML) < parseFloat(y.innerHTML)) {
+			          		shouldSwitch = true;
+			          		break;
+			          		}
+			     		}
+			     		if (n == 0 || n == 1) {
+				        	if (x.innerText.toLowerCase() < y.innerText.toLowerCase()) {
+				          	shouldSwitch = true;
+				          	break;
+				        	}
+			        	}
+			      	}
+		    	}
+			    if (shouldSwitch) {
+			      rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+			      switching = true;
+			      switchcount ++; 
+			    } 
+			    else {		      
+			      	if (switchcount == 0 && dir == "asc") {
+			        	dir = "desc";
+			        	switching = true;
+			      	}
+			    }
+		  	}
+		}
+	</script>
+</html>
