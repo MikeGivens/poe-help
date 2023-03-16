@@ -1,0 +1,21 @@
+{
+  "name": "poe-help",
+  "description": "PoE build webcrawler",
+  "main": "app.js",
+  "authors": [
+    "Mike Givens"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/MikeGivens/poe-help",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "4.1.1"
+  }
+}
